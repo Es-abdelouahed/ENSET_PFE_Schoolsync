@@ -1,10 +1,35 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { NavLink } from 'react-router-dom';
-import { FaUser, FaChalkboardTeacher, FaSchool, FaUserGraduate, FaBook, FaQuestionCircle, FaComments } from 'react-icons/fa';
+import { NavLink, Link } from 'react-router-dom';
+import {
+  FaUser,
+  FaChalkboardTeacher,
+  FaSchool,
+  FaUserGraduate,
+  FaBook,
+  FaQuestionCircle,
+  FaComments,
+} from 'react-icons/fa';
 
 const Sidebar = ({ expanded, setExpanded }) => {
   const { userType } = useSelector((state) => state.auth);
+  const { profile: adminProfile } = useSelector((state) => state.admin);
+  const { profile: teacherProfile } = useSelector((state) => state.teacher);
+  const { profile: studentProfile } = useSelector((state) => state.student);
+
+  const profile =
+    userType === 'admin'
+      ? adminProfile
+      : userType === 'teacher'
+        ? teacherProfile
+        : studentProfile;
+  const fullName = `${profile?.firstName || ''} ${profile?.lastName || ''}`.trim() || userType || 'User';
+  const initials = fullName
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase();
 
   const adminLinks = [
     { name: 'Dashboard', path: '/admin/dashboard', icon: <FaBook /> },
@@ -32,94 +57,72 @@ const Sidebar = ({ expanded, setExpanded }) => {
   ];
 
   const links = userType === 'admin' ? adminLinks : userType === 'teacher' ? teacherLinks : studentLinks;
-
-  const handleProfileClick = () => {
-    window.open('https://github.com/Abdelouahed06', '_blank');
+  const closeDrawerOnMobile = () => {
+    if (window.innerWidth < 1024) {
+      setExpanded(false);
+    }
   };
 
   return (
     <>
       <aside
-        className={`fixed top-0 left-0 h-screen bg-gray-900 text-white shadow-lg z-40 transition-transform duration-300 
-          ${expanded ? 'translate-x-0' : '-translate-x-full'} 
-          lg:translate-x-0 lg:${expanded ? 'w-64' : 'w-16'}`}
+        className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] w-72 max-w-[85vw] border-r border-slate-800/80 bg-slate-950 text-white shadow-xl shadow-slate-950/10 transition-all duration-300 ease-in-out ${
+          expanded ? 'translate-x-0 lg:w-64' : '-translate-x-full lg:w-16 lg:translate-x-0'
+        }`}
       >
-        <nav className="h-full flex flex-col">
-          <div className="p-4 flex justify-between items-center border-b border-gray-700">
-            <div className={`overflow-hidden transition-all ${expanded ? 'w-32' : 'w-0'}`}>
-              <span className="text-lg font-bold">NSET</span>
-            </div>
-            <button
-              onClick={() => setExpanded(false)}
-              className="p-2 text-gray-400 rounded-lg hover:bg-gray-800 hover:text-white lg:hidden"
-              aria-label="Close sidebar"
-            >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
+        <nav className="flex h-full flex-col px-3 py-5">
+          <div className={`mb-3 px-3 text-[11px] font-semibold uppercase tracking-[0.16em] text-slate-500 ${expanded ? '' : 'lg:sr-only'}`}>
+            Workspace
           </div>
-          <ul className="flex-1 px-3 py-4">
+          <ul className="flex-1 space-y-1.5 overflow-y-auto">
             {links.map((link) => (
-              <li key={link.name} className="relative my-1">
+              <li key={link.name}>
                 <NavLink
                   to={link.path}
-                  onClick={() => setExpanded(false)}
+                  onClick={closeDrawerOnMobile}
+                  title={expanded ? undefined : link.name}
                   className={({ isActive }) =>
-                    `flex items-center py-2 px-3 rounded-md transition-colors group ${
-                      isActive ? 'bg-gradient-to-r from-blue-600 to-blue-500 text-white' : 'text-gray-300 hover:bg-gray-800 hover:text-white'
-                    }`
+                    `group flex min-h-11 items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 ${
+                      isActive
+                        ? 'bg-blue-600 text-white shadow-lg shadow-blue-950/30'
+                        : 'text-slate-400 hover:bg-white/10 hover:text-white'
+                    } ${expanded ? '' : 'lg:justify-center lg:px-0'}`
                   }
                 >
-                  <span className="text-lg">{link.icon}</span>
-                  <span className={`overflow-hidden transition-all ${expanded ? 'w-52 ml-3' : 'w-0'}`}>
-                    {link.name}
+                  <span className="flex h-5 w-5 shrink-0 items-center justify-center text-base">
+                    {link.icon}
                   </span>
-                  {!expanded && (
-                    <div
-                      className={`
-                        absolute left-full rounded-md px-2 py-1 ml-6
-                        bg-blue-600 text-white text-sm
-                        invisible opacity-0 -translate-x-3 transition-all
-                        group-hover:visible group-hover:opacity-100 group-hover:translate-x-0
-                        lg:block hidden
-                      `}
-                    >
-                      {link.name}
-                    </div>
-                  )}
+                  <span className={`truncate ${expanded ? '' : 'lg:hidden'}`}>{link.name}</span>
                 </NavLink>
               </li>
             ))}
           </ul>
-          <div className="border-t border-gray-700 flex p-3">
-            <div className="relative group">
-              <img
-                src="https://ui-avatars.com/api/?name=E+A&background=c7d2fe&color=3730a3&bold=true"
-                alt="User avatar"
-                className="w-10 h-10 rounded-md cursor-pointer hover:opacity-80 transition-opacity"
-                onClick={handleProfileClick}
-              />
-              {!expanded && (
-                <div className="absolute left-full top-1/2 transform -translate-y-1/2 ml-2 px-2 py-1 bg-gray-800 text-white text-sm rounded-md opacity-0 invisible transition-opacity duration-200 group-hover:opacity-100 group-hover:visible whitespace-nowrap lg:block hidden">
-                  EsAb GitHub
-                </div>
-              )}
-            </div>
-            <div className={`flex justify-between items-center overflow-hidden transition-all ${expanded ? 'w-52 ml-3' : 'w-0'}`}>
-              <div className="leading-4">
-                <h4 className="font-semibold">EsAb</h4>
-                <span className="text-xs text-gray-400">EsAb.dev@gmail.com</span>
-              </div>
-            </div>
-          </div>
+
+          <Link
+            to={`/${userType}/profile`}
+            onClick={closeDrawerOnMobile}
+            title={expanded ? undefined : fullName}
+            className={`mt-4 flex items-center gap-3 rounded-xl border border-white/10 bg-white/5 p-2.5 transition-colors hover:bg-white/10 ${
+              expanded ? '' : 'lg:justify-center lg:px-1.5'
+            }`}
+          >
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-indigo-400/20 text-sm font-bold text-indigo-200">
+              {initials}
+            </span>
+            <span className={`min-w-0 flex-1 ${expanded ? '' : 'lg:hidden'}`}>
+              <span className="block truncate text-sm font-semibold text-white">{fullName}</span>
+              <span className="mt-0.5 block truncate text-xs capitalize text-slate-400">{userType}</span>
+            </span>
+          </Link>
         </nav>
       </aside>
+
       {expanded && (
-        <div
-          className="fixed inset-0 bg-black bg-opacity-50 z-30 lg:hidden"
+        <button
+          type="button"
+          className="fixed inset-x-0 bottom-0 top-16 z-30 bg-slate-950/55 backdrop-blur-[2px] lg:hidden"
           onClick={() => setExpanded(false)}
-          aria-hidden="true"
+          aria-label="Close navigation menu"
         />
       )}
     </>
