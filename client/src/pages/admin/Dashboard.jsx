@@ -17,34 +17,18 @@ const Dashboard = () => {
         <Header expanded={expanded} setExpanded={setExpanded} />
         <main className="flex-1 p-4 sm:p-6 lg:p-8 pt-20 lg:pt-16">
           <div className="max-w-6xl mx-auto">
-            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-6 pt-6 pb-6 border-b-2 border-gray-200">
-              School Statistic
-            </h1>
-            <br></br>
-            <div className="mb-6 flex justify-center md:hidden">
-              <img
-                src="/Welcome.svg"
-                alt="Welcome illustration"
-                className="w-full max-w-xs sm:max-w-sm h-auto"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
+            <div className="mb-8 pt-4 sm:pt-6">
+              <p className="text-sm font-semibold uppercase tracking-wider text-indigo-600">
+                Admin dashboard
+              </p>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
+                School overview
+              </h1>
+              <p className="mt-2 text-gray-500">
+                A quick look at the people and learning resources in your school.
+              </p>
             </div>
-            <div className="bg-white rounded-xl shadow-sm p-4 sm:p-6">
-              <DashboardStats />
-            </div>
-            <div className="mb-6 mt-3 justify-center hidden lg:flex">
-              <img
-                src="/Welcome.svg"
-                alt="Welcome illustration"
-                className="w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg h-auto"
-                onError={(e) => {
-                  e.target.style.display = 'none';
-                }}
-              />
-            </div>
-
+            <DashboardStats />
           </div>
         </main>
       </div>

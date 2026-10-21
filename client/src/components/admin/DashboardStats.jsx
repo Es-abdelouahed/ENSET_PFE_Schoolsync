@@ -23,54 +23,57 @@ const DashboardStats = () => {
     {
       title: 'Total Teachers',
       value: dashboard.teachersCount,
-      icon: <FaChalkboardTeacher className="text-2xl" />,
-      bgColor: 'bg-indigo-50',
-      textColor: 'text-indigo-600',
-      borderColor: 'border-indigo-100'
+      icon: <FaChalkboardTeacher />,
+      iconColor: 'text-indigo-600',
+      iconBg: 'bg-indigo-50',
+      accent: 'bg-indigo-500'
     },
     {
       title: 'Total Students',
       value: dashboard.studentsCount,
-      icon: <FaUserGraduate className="text-2xl" />,
-      bgColor: 'bg-blue-50',
-      textColor: 'text-blue-600',
-      borderColor: 'border-blue-100'
+      icon: <FaUserGraduate />,
+      iconColor: 'text-blue-600',
+      iconBg: 'bg-blue-50',
+      accent: 'bg-blue-500'
     },
     {
       title: 'Total Classes',
       value: dashboard.classesCount,
-      icon: <FaSchool className="text-2xl" />,
-      bgColor: 'bg-green-50',
-      textColor: 'text-green-600',
-      borderColor: 'border-green-100'
+      icon: <FaSchool />,
+      iconColor: 'text-emerald-600',
+      iconBg: 'bg-emerald-50',
+      accent: 'bg-emerald-500'
     },
     {
       title: 'Total Subjects',
       value: dashboard.SubjectCount,
-      icon: <FaBook className="text-2xl" />,
-      bgColor: 'bg-purple-50',
-      textColor: 'text-purple-600',
-      borderColor: 'border-purple-100'
+      icon: <FaBook />,
+      iconColor: 'text-violet-600',
+      iconBg: 'bg-violet-50',
+      accent: 'bg-violet-500'
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat, index) => (
-        <div 
-          key={index}
-          className={`${stat.bgColor} ${stat.borderColor} border rounded-lg p-5 transition-all hover:shadow-md`}
+    <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 xl:grid-cols-4">
+      {stats.map((stat) => (
+        <article
+          key={stat.title}
+          className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all duration-200 hover:-translate-y-1 hover:shadow-lg hover:shadow-gray-200/70"
         >
-          <div className="flex justify-between items-start">
-            <div>
-              <p className={`${stat.textColor} font-medium text-sm`}>{stat.title}</p>
-              <p className="text-2xl font-bold text-gray-800 mt-1">{stat.value}</p>
+          <div className={`absolute inset-x-0 top-0 h-1 ${stat.accent}`} />
+          <div className="flex items-start justify-between gap-4">
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-gray-500">{stat.title}</p>
+              <p className="mt-4 text-3xl font-bold tracking-tight text-gray-900 tabular-nums">
+                {stat.value}
+              </p>
             </div>
-            <div className={`${stat.textColor} p-2 rounded-lg`}>
+            <div className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-xl ${stat.iconBg} ${stat.iconColor} text-xl transition-transform duration-200 group-hover:scale-110`}>
               {stat.icon}
             </div>
           </div>
-        </div>
+        </article>
       ))}
     </div>
   );
