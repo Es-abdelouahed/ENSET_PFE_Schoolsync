@@ -62,12 +62,16 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 p-4">
       <div className="bg-white rounded-xl shadow-2xl overflow-hidden w-full max-w-4xl flex flex-col md:flex-row">
-        {/* Welcome Section */}
-        <div className="bg-gradient-to-br from-indigo-600 to-blue-800 text-white p-8 md:p-12 md:w-1/2 flex flex-col justify-center">
-          <div className="mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome!</h1>
-            <p className="text-blue-100">Sign in to access your school management dashboard</p>
-          </div>
+        {/* School illustration */}
+        <div className="relative isolate overflow-hidden bg-gradient-to-br from-indigo-600 via-blue-700 to-blue-900 p-8 md:w-1/2 flex items-center justify-center">
+          <div aria-hidden="true" className="absolute -right-16 -top-16 h-56 w-56 rounded-full border border-white/10" />
+          <div aria-hidden="true" className="absolute -bottom-24 -left-16 h-64 w-64 rounded-full border border-white/10" />
+          <div aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-blue-950/20 to-transparent" />
+          <img
+            src="/School.svg"
+            alt="Illustration of a school"
+            className="relative z-10 w-full max-w-sm object-contain drop-shadow-2xl"
+          />
         </div>
 
         {/* Login Form Section */}
